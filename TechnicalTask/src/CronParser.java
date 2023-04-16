@@ -56,13 +56,13 @@ public class CronParser {
         return parsedUnit;
     }
 
-    public void isWithinRange(String field, int value, int min, int max) throws Exception {
+    public static void isWithinRange(String field, int value, int min, int max) throws Exception {
         if (value < min || value > max) {
             throw new Exception("Incorrect value: " + value + ". The " + field + " value must be within the range [" + min + ", " + max + "]");
         }
     }
 
-    public String asterisk(int min, int max) {
+    public static String asterisk(int min, int max) {
         StringBuilder res = new StringBuilder();
 
         for (int i = min; i <= max; i++) {
@@ -72,7 +72,7 @@ public class CronParser {
         return res.toString();
     }
 
-    public String comma(String field, String s, int min, int max) throws Exception {
+    public static String comma(String field, String s, int min, int max) throws Exception {
         String[] values = s.split(",");
         StringBuilder res = new StringBuilder();
 
@@ -84,7 +84,7 @@ public class CronParser {
         return res.toString();
     }
 
-    public String hyphen(String field, String s, int min, int max) throws Exception {
+    public static String hyphen(String field, String s, int min, int max) throws Exception {
         int minOfRange = Integer.parseInt(s.substring(0, s.indexOf("-")));
         isWithinRange(field, minOfRange, min, max);
 
@@ -100,7 +100,7 @@ public class CronParser {
         return res.toString();
     }
 
-    public String forwardSlash(String field, String s, int min, int max) throws Exception {
+    public static String forwardSlash(String field, String s, int min, int max) throws Exception {
         StringBuilder res = new StringBuilder();
         String startValue = s.substring(0, s.indexOf("/"));
         int start;
@@ -113,7 +113,11 @@ public class CronParser {
             end = Integer.parseInt(rangeValues[rangeValues.length - 1]);
         } else {
             if (startValue.equals("*")) {
-                start = 0;
+                if (field.equals("minute") || field.equals("hour") || field.equals("dayOfWeek")) {
+                    start = 0;
+                } else {
+                    start = 1;
+                }
             } else {
                 start = Integer.parseInt(startValue);
                 isWithinRange(field, start, min, max);
