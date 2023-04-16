@@ -102,20 +102,20 @@ public class CronParser {
 
     public String forwardSlash(String field, String s, int min, int max) throws Exception {
         StringBuilder res = new StringBuilder();
-        String startValue = s.substring(0, s.indexOf("/")); //startValue = 15-40
+        String startValue = s.substring(0, s.indexOf("/"));
         int start;
         int end = max;
 
-        if (startValue.length() > 2) { //true
-            String range = hyphen(field, startValue, min, max); //range "15 16 ... 39 40 "
-            String[] rangeValues = range.split("\\s+"); // rangeValues = [15, 16, ..., 39, 40]
-            start = Integer.parseInt(rangeValues[0]); //15
-            end = Integer.parseInt(rangeValues[rangeValues.length - 1]); //40
+        if (startValue.length() > 2) { //check for val1-val2 presence
+            String range = hyphen(field, startValue, min, max);
+            String[] rangeValues = range.split("\\s+");
+            start = Integer.parseInt(rangeValues[0]);
+            end = Integer.parseInt(rangeValues[rangeValues.length - 1]);
         } else {
             if (startValue.equals("*")) {
                 start = 0;
             } else {
-                start = Integer.parseInt(startValue); //example 15/5
+                start = Integer.parseInt(startValue);
                 isWithinRange(field, start, min, max);
             }
         }
