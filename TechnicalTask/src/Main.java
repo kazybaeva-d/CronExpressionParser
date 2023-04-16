@@ -6,8 +6,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         String cronExp = input.nextLine();
-        String[] arr = new String[6];
-        arr = cronExp.trim().split("\\s+");
+        String[] arr = cronExp.trim().split("\\s+");
 
         System.out.println(asterisk(arr[3], 1, 12));
         System.out.println(comma(arr[2]));
@@ -50,11 +49,26 @@ public class Main {
     }
 
     public static String forwardSlash(String s, int max) {
-        int start = Integer.parseInt(s.substring(0, s.indexOf("/")));
-        int step = Integer.parseInt(s.substring(s.indexOf("/") + 1));
         StringBuilder res = new StringBuilder();
+        int min;
+        String startValue = s.substring(0, s.indexOf("/")); //startValue = 15-40
 
-        for (int i = start; i <= max; i += step) {
+        if (startValue.length() > 2) { //true
+            String range = hyphen(startValue); //range "15 16 ... 39 40 "
+            String[] rangeValues = range.split("\\s+"); // rangeValues = [15, 16, ..., 39, 40]
+            min = Integer.parseInt(rangeValues[0]); //15
+            max = Integer.parseInt(rangeValues[rangeValues.length - 1]); //40
+        } else {
+            if (startValue.equals("*")) {
+                min = 0;
+            } else {
+                min = Integer.parseInt(s.substring(0, s.indexOf("/")));
+            }
+        }
+
+        int step = Integer.parseInt(s.substring(s.indexOf("/") + 1));
+
+        for (int i = min; i <= max; i += step) {
             res.append(i).append(" ");
         }
 
